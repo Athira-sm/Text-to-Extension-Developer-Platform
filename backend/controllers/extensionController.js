@@ -1,5 +1,6 @@
 const generateExtension = require("../services/geminiService");
-const Extension = require("../models/Extension"); // if you want to save — optional
+const Extension = require("../models/Extension");
+const createExtensionZip = require("../services/fileService");
 
 exports.generateExtensionController = async (req, res) => {
   try {
@@ -37,7 +38,6 @@ exports.generateExtensionController = async (req, res) => {
       });
     }
 
-    // REQUIRED FILE VALIDATION
     const requiredFiles = ["manifest.json", "content.js", "popup.html"];
 
     for (const file of requiredFiles) {
@@ -48,10 +48,8 @@ exports.generateExtensionController = async (req, res) => {
       }
     }
 
-    res.json({
-      success: true,
-      files,
-    });
+    const zipPath = await createExtensionZip(files);
+    res.download(zipPath, "extension.zip");
 
   } catch (error) {
     console.error(error);
