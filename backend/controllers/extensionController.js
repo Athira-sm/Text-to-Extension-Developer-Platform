@@ -2,6 +2,7 @@ const generateExtension = require("../services/geminiService");
 const Extension = require("../models/Extension");
 const createExtensionZip = require("../services/fileService");
 
+
 exports.generateExtensionController = async (req, res) => {
   try {
     const { prompt } = req.body;
@@ -48,7 +49,15 @@ exports.generateExtensionController = async (req, res) => {
       }
     }
 
+    const savedExtension = await Extension.create({
+      prompt,
+      files,
+    });
+
+    
     const zipPath = await createExtensionZip(files);
+
+    
     res.download(zipPath, "extension.zip");
 
   } catch (error) {
@@ -56,6 +65,24 @@ exports.generateExtensionController = async (req, res) => {
     res.status(500).json({
       message: "Server error",
       error: error.message,
+    });
+  }
+};
+
+
+exports.getExtensions = async (req, res) => {
+  try {
+    const extensions = await Extension.find().sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: extensions,
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching extensions",
     });
   }
 };
