@@ -1,0 +1,1 @@
+{"manifest_version":3,"name":"Safe Extension","version":"1.0","permissions":["activeTab","scripting"],"action":{"default_popup":"popup.html"}}

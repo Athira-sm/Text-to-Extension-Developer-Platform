@@ -1,13 +1,8 @@
 const mongoose = require("mongoose");
 
 const ExtensionSchema = new mongoose.Schema({
-  prompt: {
-    type: String,
-    required: true,
-  },
-  files: {
-    type: Object, 
-  },
+  prompt: String,
+  files: Object,
   createdAt: {
     type: Date,
     default: Date.now,
