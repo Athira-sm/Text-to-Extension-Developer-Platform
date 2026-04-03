@@ -3,36 +3,43 @@ const path = require("path");
 const archiver = require("archiver");
 
 async function createExtensionZip(files) {
-  const tempDir = path.join(__dirname, "../tmp");
+  return new Promise((resolve, reject) => {
+    const tempDir = path.join(__dirname, "../tmp");
 
-  if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
+    if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
 
-  const folderName = `extension_${Date.now()}`;
-  const extensionDir = path.join(tempDir, folderName);
+    const folderName = `ext_${Date.now()}`;
+    const extensionDir = path.join(tempDir, folderName);
 
-  fs.mkdirSync(extensionDir);
+    fs.mkdirSync(extensionDir);
 
-  for (const filename in files) {
-    const filePath = path.join(extensionDir, filename);
+    for (const filename in files) {
+      const filePath = path.join(extensionDir, filename);
 
-    const dir = path.dirname(filePath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+      const dir = path.dirname(filePath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+
+      fs.writeFileSync(filePath, files[filename]);
     }
 
-    fs.writeFileSync(filePath, files[filename]);
-  }
+    const zipPath = path.join(tempDir, `${folderName}.zip`);
 
-  const zipPath = path.join(tempDir, `${folderName}.zip`);
+    const output = fs.createWriteStream(zipPath);
+    const archive = archiver("zip", { zlib: { level: 9 } });
 
-  const output = fs.createWriteStream(zipPath);
-  const archive = archiver("zip");
+    output.on("close", () => {
+      fs.rmSync(extensionDir, { recursive: true, force: true });
+      resolve(zipPath);
+    });
 
-  archive.pipe(output);
-  archive.directory(extensionDir, false);
-  await archive.finalize();
+    archive.on("error", (err) => reject(err));
 
-  return zipPath;
+    archive.pipe(output);
+   archive.directory(extensionDir, folderName);
+    archive.finalize();
+  });
 }
 
 module.exports = createExtensionZip;

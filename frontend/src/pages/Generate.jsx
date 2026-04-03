@@ -19,10 +19,15 @@ function Generate() {
       setSuccess("");
 
       const res = await axios.post(
-        "http://localhost:5000/api/generate-extension",
-        { prompt },
-        { responseType: "blob" }
-      );
+  "http://localhost:5000/api/generate-extension",
+  { prompt },
+  {
+    responseType: "blob",
+    headers: {
+      "x-user-plan": "pro", // ✅ IMPORTANT
+    },
+  }
+);
 
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
