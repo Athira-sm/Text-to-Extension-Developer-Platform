@@ -5,10 +5,8 @@ function sanitizeFiles(files) {
 
   for (let filename in files) {
     const safeName = sanitize(filename);
-
     let content = files[filename];
 
-    // 🚫 block dangerous code
     if (
       content.includes("eval(") ||
       content.includes("child_process") ||
@@ -16,6 +14,17 @@ function sanitizeFiles(files) {
       content.includes("rm -rf")
     ) {
       content = "// unsafe code removed";
+    }
+
+    if (safeName === "manifest.json") {
+      try {
+        let json = JSON.parse(content);
+
+       
+        delete json.icons;
+
+        content = JSON.stringify(json, null, 2);
+      } catch {}
     }
 
     cleanFiles[safeName] = content;
