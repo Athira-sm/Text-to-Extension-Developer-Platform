@@ -74,10 +74,27 @@ const downloadExistingExtension = async (req, res) => {
     res.status(500).json({ message: "Download failed" });
   }
 };
+const deleteExtension = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Extension.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.json({ success: true, message: "Deleted successfully" });
+
+  } catch {
+    res.status(500).json({ message: "Delete failed" });
+  }
+};
 
 module.exports = {
   generateExtensionController,
   getExtensions,
   updateExtension,
   downloadExistingExtension,
+  deleteExtension,
 };

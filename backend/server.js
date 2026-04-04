@@ -26,5 +26,5 @@ connectDB();
 app.use("/api", extensionRoutes);
 
 app.listen(5000, () => {
-  console.log("Server running 🚀");
+  console.log("Server running ");
 });

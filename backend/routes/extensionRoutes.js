@@ -6,6 +6,7 @@ const {
   getExtensions,
   updateExtension,
   downloadExistingExtension,
+  deleteExtension,
 } = require("../controllers/extensionController");
 
 const checkSubscription = require("../middleware/subscription");
@@ -16,5 +17,5 @@ router.post("/generate-extension", checkSubscription, generateExtensionControlle
 router.get("/extensions", getExtensions);
 router.put("/extension/:id", updateExtension);
 router.get("/download/:id", downloadExistingExtension);
-
+router.delete("/extension/:id", deleteExtension);
 module.exports = router;
