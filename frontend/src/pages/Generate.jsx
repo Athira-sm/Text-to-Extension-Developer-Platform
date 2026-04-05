@@ -40,46 +40,46 @@ function Generate() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <div className="bg-gray-800 p-8 rounded-2xl w-[420px] shadow-xl">
-        
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          🚀 Create Extension
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] text-white">
+
+      <div className="backdrop-blur-lg bg-white/10 border border-white/20 p-8 rounded-2xl w-[420px] shadow-2xl">
+
+        <h1 className="text-2xl font-bold mb-4 text-center text-indigo-300">
+           Generate Extension
         </h1>
 
         <textarea
           rows={5}
-          className="w-full p-3 rounded bg-gray-900 border border-gray-700 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          placeholder="Enter requirement..."
+          className="w-full p-3 rounded bg-black/40 border border-gray-600 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="Enter your requirement..."
           onChange={(e) => setPrompt(e.target.value)}
         />
 
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className={`w-full py-2 rounded transition ${
+          className={`w-full py-2 rounded transition flex justify-center items-center ${
             loading
               ? "bg-gray-600 cursor-not-allowed"
-              : "bg-indigo-500 hover:bg-indigo-600"
+              : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90"
           }`}
         >
-          {loading ? "Generating..." : "Generate"}
+          {loading ? " Generating..." : "Generate"}
         </button>
 
-        {/* Navigation Buttons */}
         <div className="flex gap-2 mt-3">
           <button
             onClick={() => navigate("/")}
-            className="w-full bg-gray-600 py-2 rounded hover:bg-gray-700"
+            className="px-4 py-2 bg-indigo-500 rounded-lg hover:bg-indigo-600"
           >
-            🏠 Home
+            Home
           </button>
 
           <button
             onClick={() => navigate("/dashboard")}
-            className="w-full bg-purple-500 py-2 rounded hover:bg-purple-600"
+            className="w-full bg-purple-600 py-2 rounded hover:bg-purple-700"
           >
-            📦 My Extensions
+            My Extensions
           </button>
         </div>
 
