@@ -27,7 +27,7 @@ RULES:
 `;
 
 async function generateExtension(prompt) {
-  const models = ["gemini-2.5-flash"];
+  const models = ["gemini-1.5-flash"];
 
   for (let modelName of models) {
     let attempts = 2;
@@ -64,7 +64,6 @@ async function generateExtension(prompt) {
     }
   }
 
-  // ✅ FINAL FALLBACK (100% SAFE)
   console.log("Using fallback response");
 
   return JSON.stringify({

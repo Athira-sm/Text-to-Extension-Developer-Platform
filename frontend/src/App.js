@@ -7,7 +7,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* ✅ Landing page first */}
+       
         <Route path="/" element={<Landing />} />
         <Route path="/generate" element={<Generate />} />
         <Route path="/dashboard" element={<Dashboard />} />

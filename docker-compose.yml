@@ -1,0 +1,32 @@
+services:
+  backend:
+    build: ./backend
+    container_name: extensio_backend
+    ports:
+      - "5002:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/extensio
+      - GEMINI_API_KEY=your_api_key_here
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app
+
+  mongo:
+    image: mongo:6
+    container_name: extensio_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  frontend:
+    build: ./frontend
+    container_name: extensio_frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+
+volumes:
+  mongo_data:

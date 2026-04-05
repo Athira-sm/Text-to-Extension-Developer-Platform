@@ -15,21 +15,6 @@ function Landing() {
         <h1 className="text-2xl font-bold text-indigo-400">
           Extensify AI
         </h1>
-
-        <div className="flex gap-4">
-          <button
-            onClick={() => navigate("/generate")}
-            className="px-4 py-2 bg-indigo-500 rounded-lg hover:bg-indigo-600"
-          >
-            Create
-          </button>
-          <button
-            onClick={() => navigate("/dashboard")}
-           className="px-4 py-2 bg-indigo-500 rounded-lg hover:bg-indigo-600"
-          >
-            Dashboard
-          </button>
-        </div>
       </div>
 
       

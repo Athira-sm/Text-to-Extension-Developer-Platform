@@ -50,10 +50,10 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f2027] via-[#203a43] to-[#2c5364] text-white p-6">
 
-      {/* HEADER */}
+      
       <div className="flex justify-between items-center mb-6">
 
-        {/* LEFT SIDE */}
+       
         <div className="flex items-center gap-4">
           <button
             onClick={() => navigate("/")}
@@ -67,7 +67,7 @@ function Dashboard() {
           </h1>
         </div>
 
-        {/* RIGHT SIDE */}
+   
         <button
           onClick={() => navigate("/generate")}
           className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 rounded-lg hover:opacity-90"
@@ -76,7 +76,6 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* EXTENSIONS */}
       <div className="grid gap-4">
         {extensions.map((ext) => (
           <div
