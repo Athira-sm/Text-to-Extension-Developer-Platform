@@ -9,7 +9,7 @@ STRICT RULES:
 - Output ONLY valid JSON
 - No explanation
 - No markdown
-- Escape quotes properly using \\"
+- Escape quotes properly using \\\"
 - Use \\n for new lines
 
 FORMAT:
@@ -24,71 +24,62 @@ RULES:
 - Manifest V3
 - popup.html must not contain inline JS
 - Use popup.js
+- Always generate WORKING JavaScript
+
+IMPORTANT LOGIC:
+- If user asks to remove images:
+  Use this exact logic in content.js:
+  document.querySelectorAll("img").forEach(img => img.remove());
+
+- If user asks to replace images:
+  Replace each <img> with a colored box
+
+- content.js must contain DOM manipulation based on user request
 `;
 
 async function generateExtension(prompt) {
-  const models = ["gemini-1.5-flash"];
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+    });
 
-  for (let modelName of models) {
-    let attempts = 2;
+    const result = await model.generateContent(
+      systemPrompt + "\nUser Request:\n" + prompt
+    );
 
-    while (attempts > 0) {
-      try {
-        console.log(`Trying model: ${modelName}`);
+    return result.response.text();
 
-        const model = genAI.getGenerativeModel({
-          model: modelName,
-        });
+  } catch (error) {
+    console.error("AI Error:", error.message);
 
-        const result = await model.generateContent(
-          systemPrompt + "\nUser Request:\n" + prompt
-        );
+    // 🔥 Improved fallback (REMOVE IMAGES)
+    return JSON.stringify({
+      "manifest.json": JSON.stringify({
+        manifest_version: 3,
+        name: "Image Remover",
+        version: "1.0",
+        permissions: ["activeTab", "scripting"],
+        action: { default_popup: "popup.html" }
+      }),
 
-        const text = result.response.text();
+      "content.js": `
+document.querySelectorAll("img").forEach(img => {
+  img.remove();
+});
+`.trim(),
 
-        console.log("AI Success");
-
-        return text;
-
-      } catch (error) {
-        console.error("Gemini Error:", error.message);
-
-        if (error.message.includes("503") && attempts > 1) {
-          console.log("Retrying...");
-          await new Promise(res => setTimeout(res, 2000));
-          attempts--;
-        } else {
-          break;
-        }
-      }
-    }
-  }
-
-  console.log("Using fallback response");
-
-  return JSON.stringify({
-    "manifest.json": JSON.stringify({
-      manifest_version: 3,
-      name: "Fallback Extension",
-      version: "1.0",
-      permissions: ["activeTab", "scripting"],
-      action: { default_popup: "popup.html" }
-    }),
-
-    "content.js": "document.body.style.backgroundColor = 'red';",
-
-    "popup.html": `
+      "popup.html": `
 <!DOCTYPE html>
 <html>
-<head><title>Extension</title></head>
+<head><title>Image Remover</title></head>
 <body>
-<button id="btn">Click</button>
+<button id="btn">Remove Images</button>
 <script src="popup.js"></script>
 </body>
 </html>
 `.trim(),
 
-    "popup.js": `
+      "popup.js": `
 document.getElementById("btn").addEventListener("click", () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.scripting.executeScript({
@@ -98,7 +89,8 @@ document.getElementById("btn").addEventListener("click", () => {
   });
 });
 `.trim()
-  });
+    });
+  }
 }
 
 module.exports = generateExtension;
