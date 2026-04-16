@@ -52,7 +52,6 @@ async function generateExtension(prompt) {
   } catch (error) {
     console.error("AI Error:", error.message);
 
-    // 🔥 Improved fallback (REMOVE IMAGES)
     return JSON.stringify({
       "manifest.json": JSON.stringify({
         manifest_version: 3,
